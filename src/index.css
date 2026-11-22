@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-echo-950 text-slate-100 font-sans antialiased;
+    color-scheme: dark;
+  }
+}
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #06080F;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1E293B;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Print Styles */
+@media print {
+  body {
+    background-color: white !important;
+    color: black !important;
+  }
+  .print\:hidden {
+    display: none !important;
+  }
+}
