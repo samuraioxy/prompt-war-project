@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   X, 
   History, 
@@ -38,6 +38,17 @@ export const InvestigationHistoryModal: React.FC<InvestigationHistoryModalProps>
   const [editingTitle, setEditingTitle] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Escape key listener
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handleStartRename = (inv: Investigation) => {
@@ -57,17 +68,34 @@ export const InvestigationHistoryModal: React.FC<InvestigationHistoryModalProps>
   );
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="history-modal-title"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200"
+    >
       <div className="relative w-full max-w-2xl bg-echo-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl space-y-5 max-h-[85vh] flex flex-col">
         {/* Header */}
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-violet-950 text-violet-400 border border-violet-800/40">
+            <div className="p-2.5 rounded-xl bg-violet-950 text-violet-400 border border-violet-800/40" aria-hidden="true">
               <History className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-bold text-white">Investigation Dossier History</h3>
-              <p className="text-xs text-slate-400 font-mono">
+              <h3 id="history-modal-title" className="text-lg font-bold text-white">Investigation Dossier History</h3>
+              <p className="text-xs text-slate-300 font-mono">
+                Locally saved intelligence records stored in browser LocalStorage
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            aria-label="Close history modal"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-echo-800 focus-visible:ring-2 focus-visible:ring-cyan-400 focus:outline-none"
+          >
+            <X className="w-5 h-5" aria-hidden="true" />
+          </button>
+        </div>
                 Locally saved intelligence records stored in browser LocalStorage
               </p>
             </div>

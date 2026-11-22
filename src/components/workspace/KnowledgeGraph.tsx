@@ -196,37 +196,41 @@ export const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({
         <div className="flex items-center gap-1.5">
           <button
             onClick={() => setViewMode(viewMode === 'GRAPH' ? 'LIST' : 'GRAPH')}
-            className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-mono bg-echo-950 border border-slate-700 text-slate-300 hover:text-white transition-colors"
+            aria-label={viewMode === 'GRAPH' ? 'Switch to accessible list view' : 'Switch to interactive SVG graph view'}
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-mono bg-echo-950 border border-slate-700 text-slate-300 hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-cyan-400 focus:outline-none"
           >
-            {viewMode === 'GRAPH' ? <List className="w-3.5 h-3.5" /> : <GitGraph className="w-3.5 h-3.5" />}
+            {viewMode === 'GRAPH' ? <List className="w-3.5 h-3.5" aria-hidden="true" /> : <GitGraph className="w-3.5 h-3.5" aria-hidden="true" />}
             <span>{viewMode === 'GRAPH' ? 'Accessible List' : 'SVG Graph'}</span>
           </button>
 
           {viewMode === 'GRAPH' && (
-            <div className="flex items-center gap-1 bg-echo-950 p-0.5 rounded border border-slate-800">
+            <div className="flex items-center gap-1 bg-echo-950 p-0.5 rounded border border-slate-800" role="toolbar" aria-label="Graph Zoom Controls">
               <button
                 onClick={handleZoomOut}
-                className="p-1 text-slate-400 hover:text-white transition-colors"
+                className="p-1 text-slate-400 hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-cyan-400 focus:outline-none"
+                aria-label="Zoom out knowledge graph"
                 title="Zoom Out"
               >
-                <ZoomOut className="w-3.5 h-3.5" />
+                <ZoomOut className="w-3.5 h-3.5" aria-hidden="true" />
               </button>
-              <span className="text-[10px] font-mono text-slate-400 px-1">
+              <span className="text-[10px] font-mono text-slate-300 px-1" aria-live="polite">
                 {Math.round(zoomLevel * 100)}%
               </span>
               <button
                 onClick={handleZoomIn}
-                className="p-1 text-slate-400 hover:text-white transition-colors"
+                className="p-1 text-slate-400 hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-cyan-400 focus:outline-none"
+                aria-label="Zoom in knowledge graph"
                 title="Zoom In"
               >
-                <ZoomIn className="w-3.5 h-3.5" />
+                <ZoomIn className="w-3.5 h-3.5" aria-hidden="true" />
               </button>
               <button
                 onClick={handleResetZoom}
-                className="p-1 text-slate-400 hover:text-white transition-colors ml-0.5"
+                className="p-1 text-slate-400 hover:text-white transition-colors ml-0.5 focus-visible:ring-2 focus-visible:ring-cyan-400 focus:outline-none"
+                aria-label="Reset zoom to 100 percent"
                 title="Reset View"
               >
-                <RotateCcw className="w-3 h-3" />
+                <RotateCcw className="w-3 h-3" aria-hidden="true" />
               </button>
             </div>
           )}

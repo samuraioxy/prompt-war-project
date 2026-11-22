@@ -63,14 +63,17 @@ export const PerspectiveEngine: React.FC<PerspectiveEngineProps> = ({ perspectiv
       </div>
 
       {/* Perspective Selector Carousel / Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+      <div role="tablist" aria-label="Analytical Perspective Selectors" className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
         {perspectives.map((p) => {
           const isActive = p.id === activePerspective?.id;
           return (
             <button
               key={p.id}
+              role="tab"
+              aria-selected={isActive}
+              aria-controls="perspective-panel"
               onClick={() => setActiveId(p.id)}
-              className={`p-3 rounded-xl border text-left transition-all duration-200 flex flex-col justify-between h-24 ${
+              className={`p-3 rounded-xl border text-left transition-all duration-200 flex flex-col justify-between h-24 focus-visible:ring-2 focus-visible:ring-cyan-400 focus:outline-none ${
                 isActive
                   ? 'bg-echo-850 border-cyan-500/80 shadow-[0_0_15px_rgba(6,182,212,0.2)] ring-1 ring-cyan-500/40'
                   : 'bg-echo-900/70 border-slate-800 hover:border-slate-700 hover:bg-echo-900'
@@ -79,6 +82,7 @@ export const PerspectiveEngine: React.FC<PerspectiveEngineProps> = ({ perspectiv
               <div className="flex items-center justify-between w-full">
                 <span
                   className="p-1.5 rounded-lg border text-white"
+                  aria-hidden="true"
                   style={{
                     backgroundColor: `${p.color}15`,
                     borderColor: `${p.color}40`,
@@ -87,7 +91,7 @@ export const PerspectiveEngine: React.FC<PerspectiveEngineProps> = ({ perspectiv
                 >
                   {getIcon(p.icon)}
                 </span>
-                <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
                   {p.role}
                 </span>
               </div>
@@ -101,7 +105,12 @@ export const PerspectiveEngine: React.FC<PerspectiveEngineProps> = ({ perspectiv
 
       {/* Active Perspective Spotlight Dossier */}
       {activePerspective && (
-        <div className="rounded-2xl bg-echo-900/90 border border-slate-800 p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+        <article
+          role="tabpanel"
+          id="perspective-panel"
+          aria-label={`${activePerspective.personaTitle} Analytical Angle`}
+          className="rounded-2xl bg-echo-900/90 border border-slate-800 p-6 sm:p-8 shadow-2xl relative overflow-hidden"
+        >
           {/* Subtle colored glow behind card */}
           <div
             className="absolute top-0 right-0 w-96 h-96 rounded-full blur-3xl opacity-10 pointer-events-none"
@@ -221,7 +230,7 @@ export const PerspectiveEngine: React.FC<PerspectiveEngineProps> = ({ perspectiv
               </div>
             </div>
           </div>
-        </div>
+        </article>
       )}
     </div>
   );

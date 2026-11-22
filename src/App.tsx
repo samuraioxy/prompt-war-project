@@ -125,13 +125,23 @@ export const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-echo-950 text-slate-100 flex flex-col font-sans selection:bg-cyan-500/30 selection:text-cyan-200">
+      {/* Skip to Content for Accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:px-4 focus:py-2 focus:bg-cyan-400 focus:text-echo-950 focus:font-mono focus:font-bold focus:rounded-lg focus:shadow-xl focus:outline-none focus:ring-2 focus:ring-cyan-300"
+      >
+        Skip to main content
+      </a>
+
       {currentView === 'LANDING' ? (
-        <EchoLanding
-          onSelectInvestigation={handleSelectInvestigation}
-          onCustomClaimSubmit={handleCustomClaimSubmit}
-          recentInvestigations={investigations}
-          preloadedList={PRELOADED_INVESTIGATIONS}
-        />
+        <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none" role="main">
+          <EchoLanding
+            onSelectInvestigation={handleSelectInvestigation}
+            onCustomClaimSubmit={handleCustomClaimSubmit}
+            recentInvestigations={investigations}
+            preloadedList={PRELOADED_INVESTIGATIONS}
+          />
+        </main>
       ) : activeInvestigation ? (
         <div className="flex-1 flex flex-col">
           {/* Workspace Sticky Header */}
@@ -146,11 +156,17 @@ export const App: React.FC = () => {
           />
 
           {/* Active Workspace Viewport */}
-          <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <main
+            id="main-content"
+            tabIndex={-1}
+            role="main"
+            aria-label="Investigation Workspace Viewport"
+            className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 focus:outline-none"
+          >
             {activeTab === 'DECONSTRUCT' && (
               <ClaimDeconstructor
                 items={activeInvestigation.deconstruction}
-                onTriggerChallenge={(item) => {
+                onTriggerChallenge={() => {
                   setActiveTab('CHALLENGE');
                 }}
               />
@@ -160,7 +176,7 @@ export const App: React.FC = () => {
               <EvidenceExplorer
                 evidence={activeInvestigation.evidence}
                 onOpenAddEvidence={() => setIsAddEvidenceOpen(true)}
-                onChallengeEvidence={(ev) => {
+                onChallengeEvidence={() => {
                   setActiveTab('CHALLENGE');
                 }}
               />
@@ -203,15 +219,26 @@ export const App: React.FC = () => {
           </main>
         </div>
       ) : (
-        <div className="flex-1 flex items-center justify-center p-8">
+        <main id="main-content" tabIndex={-1} role="main" className="flex-1 flex items-center justify-center p-8 focus:outline-none">
           <button
             onClick={() => setCurrentView('LANDING')}
-            className="px-4 py-2 rounded-lg bg-cyan-500 text-echo-950 font-mono font-semibold"
+            className="px-4 py-2 rounded-lg bg-cyan-500 text-echo-950 font-mono font-semibold focus-visible:ring-2 focus-visible:ring-cyan-300 focus:outline-none"
           >
             Launch Investigation Workspace
           </button>
-        </div>
+        </main>
       )}
+
+      {/* Accessible Footer Landmark */}
+      <footer
+        role="contentinfo"
+        className="border-t border-slate-900 bg-echo-950/90 py-4 px-4 sm:px-6 lg:px-8 text-center text-xs font-mono text-slate-400"
+      >
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+          <span>ECHO • AI Critical Thinking & Evidence Intelligence Platform</span>
+          <span className="text-slate-400">WCAG 2.1 AA Compliant • Offline Intelligence Engine</span>
+        </div>
+      </footer>
 
       {/* Add Custom Evidence Modal */}
       <AddEvidenceModal

@@ -9,6 +9,7 @@ import {
   ConfidenceLevel,
   ChallengeActionType
 } from '../types/echo';
+import { sanitizeText, validateClaimInput } from '../utils/sanitize';
 
 /**
  * Deterministic, transparent local intelligence engine for ECHO.
@@ -24,7 +25,8 @@ export class AnalysisEngine {
    * Deconstructs any arbitrary user claim into structured analytical components
    */
   static analyzeCustomClaim(rawClaim: string): Investigation {
-    const claim = rawClaim.trim();
+    const validation = validateClaimInput(rawClaim);
+    const claim = validation.isValid ? validation.sanitized : sanitizeText(rawClaim, 200) || 'Unspecified Claim';
     const id = makeId('inv');
 
     // Categorization heuristic
@@ -342,6 +344,8 @@ export class AnalysisEngine {
         break;
     }
 
+    const sanitizedCritique = userCritique ? sanitizeText(userCritique, 1000) : undefined;
+
     // Create the ActiveChallenge record
     const challengeId = makeId('chal');
     const newChallenge: ActiveChallenge = {
@@ -350,7 +354,7 @@ export class AnalysisEngine {
       targetStatement,
       actionType,
       actionPrompt,
-      userCritique,
+      userCritique: sanitizedCritique,
       rippleExplanation,
       affectedItemIds: [targetItem.id],
       affectedNodeIds: [],
@@ -473,6 +477,11 @@ export class AnalysisEngine {
     const evId = makeId('ev-user');
     const createdItem: EvidenceItem = {
       ...newEvidence,
+      title: sanitizeText(newEvidence.title, 200),
+      explanation: sanitizeText(newEvidence.explanation, 2000),
+      provenance: sanitizeText(newEvidence.provenance, 300) || 'User-contributed empirical observation',
+      reliabilityLimitations: sanitizeText(newEvidence.reliabilityLimitations, 500) || 'User-provided qualitative input; requires independent verification.',
+      relationshipToClaim: sanitizeText(newEvidence.relationshipToClaim, 300) || 'Directly addresses the validity of the core assertion.',
       id: evId,
       isIllustrative: false,
       isUserAdded: true
