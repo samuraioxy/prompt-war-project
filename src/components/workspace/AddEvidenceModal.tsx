@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { X, Plus, ShieldCheck, AlertCircle } from 'lucide-react';
 import { EvidenceItem, EvidenceType, EvidenceStance } from '../../types/echo';
 
@@ -21,17 +21,6 @@ export const AddEvidenceModal: React.FC<AddEvidenceModalProps> = ({
   const [limitations, setLimitations] = useState('');
   const [relationship, setRelationship] = useState('');
   const [relevance, setRelevance] = useState<'HIGH' | 'MEDIUM' | 'CONTEXTUAL'>('HIGH');
-
-  // Escape key listener for accessibility
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    if (isOpen) {
-      window.addEventListener('keydown', handleKeyDown);
-      return () => window.removeEventListener('keydown', handleKeyDown);
-    }
-  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -60,33 +49,25 @@ export const AddEvidenceModal: React.FC<AddEvidenceModalProps> = ({
   };
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="add-evidence-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200"
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="relative w-full max-w-2xl bg-echo-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-cyan-950 text-cyan-400 border border-cyan-800/40" aria-hidden="true">
+            <div className="p-2.5 rounded-xl bg-cyan-950 text-cyan-400 border border-cyan-800/40">
               <Plus className="w-5 h-5" />
             </div>
             <div>
-              <h3 id="add-evidence-title" className="text-lg font-bold text-white">Add Custom Evidence Item</h3>
-              <p className="text-xs text-slate-300 font-mono">
+              <h3 className="text-lg font-bold text-white">Add Custom Evidence Item</h3>
+              <p className="text-xs text-slate-400 font-mono">
                 Integrate external observations, user telemetry, or verified field notes
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            aria-label="Close add evidence modal"
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-echo-800 focus-visible:ring-2 focus-visible:ring-cyan-400 focus:outline-none"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-echo-800"
           >
-            <X className="w-5 h-5" aria-hidden="true" />
-          </button>
-        </div>
+            <X className="w-5 h-5" />
           </button>
         </div>
 
